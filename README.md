@@ -12,7 +12,7 @@ See [action.yml](action.yml)
 Single Broker Mode:
 ```yaml
     - name: start redpanda
-      uses: debu999/github-action@v1.0.0
+      uses: redpanda-data/github-action@v1.0.0
       with:
         version: "latest"
         cluster_mode: "false"
@@ -22,7 +22,7 @@ Now you should be able to connect to `redpanda` (kafka-api) running at `localhos
 Cluster Mode:
 ```yaml
     - name: start redpanda
-      uses: debu999/github-action@v1.0.0
+      uses: redpanda-data/github-action@v1.0.0
       with:
         version: "latest"
         cluster_mode: "true"

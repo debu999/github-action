@@ -1,4 +1,4 @@
-name: "redpanda-cluster-action"
+name: "redpanda-action"
 description: "Setup Redpanda Single or Cluster Mode"
 author: "Debabrata Patnaik/Celso Fernandes/Alexander Gallego"
 branding:
@@ -10,7 +10,7 @@ inputs:
     required: false
     default: "latest"
   cluster_mode:
-    description: "Whether to run Redpanda in cluster mode"
+    description: "Whether to run Redpanda in three node cluster mode"
     required: false
     default: "false"
 runs:
