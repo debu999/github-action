@@ -1,18 +1,18 @@
 # redpanda github action
 
-This [GitHub Action](https://github.com/features/actions) sets up Redpanda instance.
+This [GitHub Action](https://github.com/features/actions) sets up Redpanda instance in Single Broker or Three Broker Cluster mode.
 
-Docker images source [redpanda-data/redpanda](redpandadata/redpanda).
+Docker images source [redpanda-data/redpanda](https://hub.docker.com/r/redpandadata/redpanda).
 
 ---------
 # Usage
 
 See [action.yml](action.yml)
 
-Basic:
+Single Broker Mode:
 ```yaml
     - name: start redpanda
-      uses: debu999/github-action@v0.1.5
+      uses: debu999/github-action@v1.0.0
       with:
         version: "latest"
         cluster_mode: "false"
@@ -22,7 +22,7 @@ Now you should be able to connect to `redpanda` (kafka-api) running at `localhos
 Cluster Mode:
 ```yaml
     - name: start redpanda
-      uses: debu999/github-action@v0.1.5
+      uses: debu999/github-action@v1.0.0
       with:
         version: "latest"
         cluster_mode: "true"
@@ -142,10 +142,10 @@ sudo yum install redpanda
 
 ## Beta releases on Docker
 
-This is an example with the `v21.3.5-beta3` version prior to the 21.3.5 release.
+This is an example with the `v24.2.14` version prior to the `24.2.11` release.
 
 ```
 # example!
-redpandadata/redpanda:v21.3.5-beta3
+redpandadata/redpanda:v24.2.12
 ```
 

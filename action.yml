@@ -1,6 +1,6 @@
 name: "redpanda-cluster-action"
 description: "Setup Redpanda Single or Cluster Mode"
-author: "debabrata"
+author: "Debabrata Patnaik/Celso Fernandes/Alexander Gallego"
 branding:
   icon: fast-forward
   color: red
@@ -16,47 +16,16 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Start Redpanda Node 0
+    - name: Start Redpanda Single Node Broker
+      if: inputs.cluster_mode != 'true'
       run: |
-        echo "Cluster mode: ${{ inputs.cluster_mode }}"
-        
-        echo "Creating Redpanda Network: redpanda_network"
-        docker network create redpanda_network --driver bridge
-        
-        echo "Creating Redpanda Volume: redpanda-0"
-        docker volume create redpanda-0
-        
-        echo "Starting redpanda-0 with version: redpandadata/redpanda:${{ inputs.version }}"
-        docker run -d --name redpanda-0 --network redpanda_network --volume redpanda-0:/var/lib/redpanda/data --publish 18081:18081 --publish 18082:18082 --publish 19092:19092 --publish 19644:9644 redpandadata/redpanda:${{ inputs.version }} redpanda start --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092 --advertise-kafka-addr internal://redpanda-0:9092,external://localhost:19092 --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082 --advertise-pandaproxy-addr internal://redpanda-0:8082,external://localhost:18082 --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081 --rpc-addr redpanda-0:33145 --advertise-rpc-addr redpanda-0:33145 --mode dev-container --smp 1 --default-log-level=info
+        ls -laRt ${{ github.action_path }}/
+        docker compose -f ${{ github.action_path }}/docker-compose-single.yml up -d
       shell: bash
-    - name: Start Redpanda Node 1
+    - name: Start Redpanda Three Node Cluster
       shell: bash
-      if: success() && inputs.cluster_mode == 'true'
-      run: |
-        echo "Creating Redpanda Volume: redpanda-1"
-        docker volume create redpanda-1
-        
-        # Wait for the first container to be running
-        until docker inspect -f '{{ .State.Running }}' redpanda-0; do
-          sleep 1
-        done
-        
-        echo "Starting redpanda-1 with version: redpandadata/redpanda:${{ inputs.version }}"
-        docker run -d --name redpanda-1 --network redpanda_network --volume redpanda-1:/var/lib/redpanda/data --publish 28081:28081 --publish 28082:28082 --publish 29092:29092 --publish 29644:9644 redpandadata/redpanda:${{ inputs.version }} redpanda start --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:29092 --advertise-kafka-addr internal://redpanda-1:9092,external://localhost:29092 --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:28082 --advertise-pandaproxy-addr internal://redpanda-1:8082,external://localhost:28082 --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:28081 --rpc-addr redpanda-1:33145 --advertise-rpc-addr redpanda-1:33145 --mode dev-container --smp 1 --default-log-level=info --seeds redpanda-0:33145
-    - name: Start Redpanda Node 2
-      shell: bash
-      if: success() && inputs.cluster_mode == 'true'
-      run: |
-        echo "Creating Redpanda Volume: redpanda-2"
-        docker volume create redpanda-2
-        
-        # Wait for the first container to be running
-        until docker inspect -f '{{ .State.Running }}' redpanda-0; do
-          sleep 1
-        done
-        
-        echo "Starting redpanda-2 with version: redpandadata/redpanda:${{ inputs.version }}"
-        docker run -d --name redpanda-2 --network redpanda_network --volume redpanda-2:/var/lib/redpanda/data --publish 38081:38081 --publish 38082:38082 --publish 39092:39092 --publish 39644:9644 redpandadata/redpanda:${{ inputs.version }} redpanda start --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:39092 --advertise-kafka-addr internal://redpanda-2:9092,external://localhost:39092 --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:38082 --advertise-pandaproxy-addr internal://redpanda-2:8082,external://localhost:38082 --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:38081 --rpc-addr redpanda-2:33145 --advertise-rpc-addr redpanda-2:33145 --mode dev-container --smp 1 --default-log-level=info --seeds redpanda-0:33145
+      if: inputs.cluster_mode == 'true'
+      run: docker compose -f ${{ github.action_path }}/docker-compose-three-node-cluster.yml up -d
     - name: Print Redpanda cluster details
       shell: bash
       if: success()
@@ -68,4 +37,3 @@ runs:
         docker network ls | grep redpanda
         echo "Volume Details"
         docker volume ls | grep redpanda
-      
