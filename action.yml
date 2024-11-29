@@ -1,6 +1,6 @@
 name: "redpanda-action"
-description: "Setup Redpanda"
-author: "fernandes"
+description: "Setup Redpanda Single or Cluster Mode"
+author: "debabrata"
 branding:
   icon: fast-forward
   color: red
