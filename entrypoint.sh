@@ -1,9 +1,9 @@
 #!/bin/sh
 
 echo "$INPUT_VERSION"
-echo "${INPUT_CLUSTER-MODE}"
+echo "${INPUT_CLUSTER_MODE}"
 
-if [ "${INPUT_CLUSTER-MODE}" = "false" ]; then
+if [ "${INPUT_CLUSTER_MODE}" = "false" ]; then
   run_redpanda="docker compose -f docker-compose-single.yml up -d"
   sh -c "$run_redpanda"
 else
