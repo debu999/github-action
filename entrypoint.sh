@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
-docker_run="docker run"
-
-run_redpanda="$docker_run -d -p 9092:9092 -p 9644:9644 vectorized/redpanda:${INPUT_VERSION} redpanda start --overprovisioned --smp 1 --memory 1G --reserve-memory 0M --node-id 0 --check=false"
-sh -c "$run_redpanda"
+if [ "$INPUT_CLUSTER_MODE" = "false" ]; then
+  docker-compose -f docker-compose-single.yml up
+else
+  docker-compose -f docker-compose-cluster.yml up
+fi
