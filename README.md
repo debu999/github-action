@@ -15,7 +15,7 @@ Basic:
       uses: debu999/github-action@v0.1.5
       with:
         version: "latest"
-        cluster-mode: "false"
+        cluster_mode: "false"
 ```
 Now you should be able to connect to `redpanda` (kafka-api) running at `localhost:19092`
 
@@ -25,7 +25,7 @@ Cluster Mode:
       uses: debu999/github-action@v0.1.5
       with:
         version: "latest"
-        cluster-mode: "true"
+        cluster_mode: "true"
 ```
 Now you should be able to connect to `redpanda` (kafka-api) running at `localhost:19092,localhost:29092,localhost:39092`
 

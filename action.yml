@@ -14,5 +14,16 @@ inputs:
     required: false
     default: "false"
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: composite
+  steps:
+    - name: Start Redpanda
+      run: |
+        echo "${{ inputs.version }}"
+        echo "${{ inputs.cluster_mode }}"
+        
+        if [ "${{ inputs.cluster_mode }}" = "false" ]; then
+          docker compose -f docker-compose-single.yml up -d
+        else
+          docker compose -f docker-compose-cluster.yml up -d
+        fi
+      shell: bash
