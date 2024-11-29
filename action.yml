@@ -1,4 +1,4 @@
-name: "redpanda-action"
+name: "redpanda"
 description: "Setup Redpanda Single or Cluster Mode"
 author: "debabrata"
 branding:
